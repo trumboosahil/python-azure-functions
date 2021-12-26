@@ -11,12 +11,11 @@ import numpy as np
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
-    location = req.params.get('locations')
-    if not location:
-        try:
-            req_body = req.get_body()          
-            requestjson = jsonpickle.decode(req_body)
-            loc = requestjson['locations']
+    req_body = req.get_body()          
+    requestjson = jsonpickle.decode(req_body)
+    loc = requestjson['locations']
+    if not loc:
+        try:         
             resp = getRouteMatrix(loc)
             print(resp)
             respdata = json.loads(resp)
@@ -27,14 +26,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             matrix = matrix[~np.isnan(matrix)]          
             count =len(loc)
             newshape = matrix.reshape(count,-1)
-            dm = np.array(newshape)             
+            dm = np.array(newshape)     
+            return func.HttpResponse(f"Hello, {dm}. This HTTP triggered function executed successfully.")        
         except ValueError:
             pass
-    
-
-    if location:
-        return func.HttpResponse(f"Hello, {dm}. This HTTP triggered function executed successfully.")
-    else:
         return func.HttpResponse(
              "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
              status_code=200

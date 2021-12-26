@@ -65,7 +65,3 @@ class root(object):
          self.routingMode = routingMode
          self.profile = "carFast"
          self.matrixAttributes = matrixAttributes
-class networkcentroidRequest(object):
-     def __init__(self,locations: List[origin],numberofcentroid: int):
-         self.locations = locations
-         self.numberofcentroid = numberofcentroid
